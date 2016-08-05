@@ -1,0 +1,316 @@
+<!--
+
+	<div class="jumbotron">
+		<h3>{{titulo}}</h3>
+
+		<input class="form-control" type="text" ng-model="criterioDeBusca" placeholder="Pesquisar..."/>
+		<h4>{{codigo}}</h4>
+		<h4>{{message}}</h4>
+		<table class="table table-striped" ng-show="contatos.length > 0">
+			<tr>
+				<th></th>
+				<th><a href="#" ng-click="ordenarPor('nome')">Nome</a></th>
+				<th><a href="#" ng-click="ordenarPor('telefone')">Telefone</a></th>
+				<th>Operadora</th>
+				<th>Data</th>
+			</tr>
+			<tr ng-class="{selecionado: contato.selecionado}"
+				ng-repeat="contato in contatos | filter: criterioDeBusca | orderBy: criterioDeOrdenacao: direcaoDaOrdenacao">
+				<td>
+					<input type="checkbox" ng-model="contato.selecionado"/>
+				</td>
+				<td>{{contato.nome | NameFilter}}</td>
+				<td>{{contato.telefone}}</td>
+				<td>{{contato.operadora.nome}}</td>
+				<td>{{contato.data | date: 'dd/MM/yyyy'}}</td>
+			</tr>
+		</table>
+		<hr/>
+		<form name="contatoForm" ng-submit="adicionarContato(contato, contatoForm)">
+			<input class="form-control" type="text" name="nome" ng-model="contato.nome" placeholder="Nome"
+				   ng-required="false"/>
+
+			<input class="form-control" type="text" name="telefone" ng-model="contato.telefone" placeholder="Telefone"
+				   ng-required="false"/>
+
+			<select class="form-control" ng-model="contato.operadora"
+				ng-options="operadora.nome +' (' +(operadora.preco | currency) +')' group by operadora.categoria for operadora in operadoras | orderBy: 'nome'">
+				<option value="">Selecione uma operadora</option>
+			</select>
+
+			<button type="submit" class="btn btn-primary btn-block" ng-disabled="contatoForm.$invalid">Adicionar</button>
+			<button ng-click = "carregarContatos()" type="submit" class="btn btn-primary ">consultar</button>
+			<button class="btn btn-danger btn-block" ng-click="apagarContato(contatos)" ng-if="isContatoSelecionado(contatos)">Remover</button>
+		</form>
+		<div class="alert alert-danger" ng-show="contatoForm.nome.$invalid && contatoForm.nome.$dirty">
+			Preencha o campo nome!!
+		</div>
+		<div class="alert alert-danger" ng-show="contatoForm.telefone.$invalid && contatoForm.telefone.$dirty">
+			Preencha o campo telefone!!
+		</div>
+
+	</div>-->
+
+	<body>
+	<div class="row">
+		<div class="col-lg-12">
+			<h1 class="page-header">{{titulo}}</h1>
+		</div>
+		<!-- /.col-lg-12 -->
+	</div>
+	<!-- /.row -->
+	<div class="row">
+		<div class="col-lg-12">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					Cadastro / Atualização
+				</div>
+				<div class="panel-body">
+					<form name="contatoForm" ng-submit="submitForm(contato)">
+						<div class="form-group">
+							<label>Nome</label>
+							<input class="form-control" type="text" name="nome" ng-model="contato.nome" placeholder="Nome"
+								   ng-required="false" ng-value="nome"/>
+							<label>Telefone</label>
+							<input class="form-control" type="text" name="telefone" ng-model="contato.telefone" placeholder="Telefone"
+								   ng-required="false" ng-value="telefone"/>
+							<br>
+							<div class="row">
+								<div class="col-md-2">
+									<button type="submit" class="btn btn-primary" ng-disabled="isContatoSelecionado(contatos)">Adicionar</button>
+								</div>
+								<div class="col-md-2">
+									<button type="submit" class="btn btn-success"  ng-if="isContatoSelecionado(contatos)">Atualizar</button>
+								</div>
+								<div class="col-md-2">
+									<button class="btn btn-danger" ng-click="excluirContato(contatos)" ng-if="isContatoSelecionado(contatos)">Remover</button>
+								</div>
+							</div>
+
+						</div>
+						<br>
+						<table class="table table-striped" ng-show="contatos.length > 0">
+							<tr>
+								<th></th>
+								<th>Nome</a></th>
+								<th>Telefone</a></th>
+							</tr>
+							<tr ng-repeat="contato in contatos">
+								<td>
+									<input type="checkbox" ng-model="contato.selecionado"/>
+								</td>
+								<td >{{contato.nome}}</td>
+								<td >{{contato.telefone}}</td>
+							</tr>
+						</table>
+						<br>
+
+					</form>
+					<button ng-click = "carregarContatos()" class="btn btn-primary ">consultar</button>
+					<!--<div class="row">
+						<div class="col-lg-6">
+							<form role="form">
+								<div class="form-group">
+									<label>Text Input</label>
+									<input class="form-control">
+									<p class="help-block">Example block-level help text here.</p>
+								</div>
+								<div class="form-group">
+									<label>Text Input with Placeholder</label>
+									<input class="form-control" placeholder="Enter text">
+								</div>
+								<div class="form-group">
+									<label>Static Control</label>
+									<p class="form-control-static">email@example.com</p>
+								</div>
+								<div class="form-group">
+									<label>File input</label>
+									<input type="file">
+								</div>
+								<div class="form-group">
+									<label>Text area</label>
+									<textarea class="form-control" rows="3"></textarea>
+								</div>
+								<div class="form-group">
+									<label>Checkboxes</label>
+									<div class="checkbox">
+										<label>
+											<input type="checkbox" value="">Checkbox 1
+										</label>
+									</div>
+									<div class="checkbox">
+										<label>
+											<input type="checkbox" value="">Checkbox 2
+										</label>
+									</div>
+									<div class="checkbox">
+										<label>
+											<input type="checkbox" value="">Checkbox 3
+										</label>
+									</div>
+								</div>
+								<div class="form-group">
+									<label>Inline Checkboxes</label>
+									<label class="checkbox-inline">
+										<input type="checkbox">1
+									</label>
+									<label class="checkbox-inline">
+										<input type="checkbox">2
+									</label>
+									<label class="checkbox-inline">
+										<input type="checkbox">3
+									</label>
+								</div>
+								<div class="form-group">
+									<label>Radio Buttons</label>
+									<div class="radio">
+										<label>
+											<input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked>Radio 1
+										</label>
+									</div>
+									<div class="radio">
+										<label>
+											<input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">Radio 2
+										</label>
+									</div>
+									<div class="radio">
+										<label>
+											<input type="radio" name="optionsRadios" id="optionsRadios3" value="option3">Radio 3
+										</label>
+									</div>
+								</div>
+								<div class="form-group">
+									<label>Inline Radio Buttons</label>
+									<label class="radio-inline">
+										<input type="radio" name="optionsRadiosInline" id="optionsRadiosInline1" value="option1" checked>1
+									</label>
+									<label class="radio-inline">
+										<input type="radio" name="optionsRadiosInline" id="optionsRadiosInline2" value="option2">2
+									</label>
+									<label class="radio-inline">
+										<input type="radio" name="optionsRadiosInline" id="optionsRadiosInline3" value="option3">3
+									</label>
+								</div>
+								<div class="form-group">
+									<label>Selects</label>
+									<select class="form-control">
+										<option>1</option>
+										<option>2</option>
+										<option>3</option>
+										<option>4</option>
+										<option>5</option>
+									</select>
+								</div>
+								<div class="form-group">
+									<label>Multiple Selects</label>
+									<select multiple class="form-control">
+										<option>1</option>
+										<option>2</option>
+										<option>3</option>
+										<option>4</option>
+										<option>5</option>
+									</select>
+								</div>
+								<button type="submit" class="btn btn-default">Submit Button</button>
+								<button type="reset" class="btn btn-default">Reset Button</button>
+							</form>
+						</div>
+						&lt;!&ndash; /.col-lg-6 (nested) &ndash;&gt;
+						<div class="col-lg-6">
+							<h1>Disabled Form States</h1>
+							<form role="form">
+								<fieldset disabled>
+									<div class="form-group">
+										<label for="disabledSelect">Disabled input</label>
+										<input class="form-control" id="disabledInput" type="text" placeholder="Disabled input" disabled>
+									</div>
+									<div class="form-group">
+										<label for="disabledSelect">Disabled select menu</label>
+										<select id="disabledSelect" class="form-control">
+											<option>Disabled select</option>
+										</select>
+									</div>
+									<div class="checkbox">
+										<label>
+											<input type="checkbox">Disabled Checkbox
+										</label>
+									</div>
+									<button type="submit" class="btn btn-primary">Disabled Button</button>
+								</fieldset>
+							</form>
+							<h1>Form Validation States</h1>
+							<form role="form">
+								<div class="form-group has-success">
+									<label class="control-label" for="inputSuccess">Input with success</label>
+									<input type="text" class="form-control" id="inputSuccess">
+								</div>
+								<div class="form-group has-warning">
+									<label class="control-label" for="inputWarning">Input with warning</label>
+									<input type="text" class="form-control" id="inputWarning">
+								</div>
+								<div class="form-group has-error">
+									<label class="control-label" for="inputError">Input with error</label>
+									<input type="text" class="form-control" id="inputError">
+								</div>
+							</form>
+							<h1>Input Groups</h1>
+							<form role="form">
+								<div class="form-group input-group">
+									<span class="input-group-addon">@</span>
+									<input type="text" class="form-control" placeholder="Username">
+								</div>
+								<div class="form-group input-group">
+									<input type="text" class="form-control">
+									<span class="input-group-addon">.00</span>
+								</div>
+								<div class="form-group input-group">
+                                            <span class="input-group-addon"><i class="fa fa-eur"></i>
+                                            </span>
+									<input type="text" class="form-control" placeholder="Font Awesome Icon">
+								</div>
+								<div class="form-group input-group">
+									<span class="input-group-addon">$</span>
+									<input type="text" class="form-control">
+									<span class="input-group-addon">.00</span>
+								</div>
+								<div class="form-group input-group">
+									<input type="text" class="form-control">
+                                            <span class="input-group-btn">
+                                                <button class="btn btn-default" type="button"><i class="fa fa-search"></i>
+												</button>
+                                            </span>
+								</div>
+							</form>
+						</div>
+						&lt;!&ndash; /.col-lg-6 (nested) &ndash;&gt;
+					</div>-->
+					<!-- /.row (nested) -->
+				</div>
+				<!-- /.panel-body -->
+			</div>
+			<!-- /.panel -->
+		</div>
+		<!-- /.col-lg-12 -->
+	</div>
+	<!-- /#wrapper -->
+
+	<!-- jQuery -->
+	<script src="../bower_components/jquery/dist/jquery.min.js"></script>
+
+	<!-- Bootstrap Core JavaScript -->
+	<script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+
+	<!-- Metis Menu Plugin JavaScript -->
+	<script src="../bower_components/metisMenu/dist/metisMenu.min.js"></script>
+
+
+	<!-- Custom Theme JavaScript -->
+	<script src="../dist/js/sb-admin-2.js"></script>
+
+	<!-- Angular -->
+	<script src="../js/lib/angular/angular.min.js"></script>
+	<script src="../js/lib/angular/angular-ui-router.js"></script>
+	<script src="../js/lib/angular/angular-locale_pt-br.js"></script>
+	<script src="../js/app.js"></script>
+	<script src="../js/controllers/ContatoController.js"></script>
+	</body>
