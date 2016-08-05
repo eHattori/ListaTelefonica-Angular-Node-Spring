@@ -97,14 +97,6 @@ public final class ListaTelefonicaDAO extends ConnectionDefault {
 
 			BasicDBObject query = new BasicDBObject().append(COLUMN_ID, new ObjectId(dto.get_id()));
 			DBCursor cursor = collection.find(query);
-			/*List<ContatoDTO> lista = selecionarTodos();
-			for (ContatoDTO c : lista){
-				if (c.get_id().equals(new ObjectId(dto.get_id()))){
-					DBObject documentoAntigo = c;
-				}
-			}*/
-			//DBObject documentoAntigo = (DBObject) collection.findOne(
-
 			collection.update(cursor.next(), documento);
 			LOGGER.info("Informações alteradas com sucesso.");
 
